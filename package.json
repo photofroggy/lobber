@@ -1,0 +1,32 @@
+{
+  "name": "lobber",
+  "description": "Stuff for making game lobbies etc.",
+  "keywords": [
+    "lobby"
+  ],
+  "author": {
+    "name": "Henry Rapley",
+    "email": "photofroggy@gmail.com",
+    "url": "https://github.com/photofroggy/"
+  },
+  "version": "0.0.7",
+  "repository": {
+    "type": "git",
+    "url": "http://github.com/photofroggy/lobber.git"
+  },
+  "engines": {
+    "node": ">=0.10.0"
+  },
+  "config": {
+    "verbose": false
+  },
+  "main": "index",
+  "directories": {
+    "lib": "./lib"
+  },
+  "readme": "",
+  "readmeFilename": "README.md",
+  "bugs": {
+    "url": "https://github.com/photofroggy/lobber/issues"
+  }
+}
