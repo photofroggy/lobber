@@ -13,13 +13,8 @@ In this example, you can see how to create a very simple chat application.
 On the server, you will need something like this.
 
 ```javascript
-
-/**
- * Websocket server for Cyborg Royale.
- */
-
+// At the moment we need to use node-websocket for the websocket server
 var http = require('http'),
-    uuid = require( 'node-uuid' ),
     WebSocketServer = require('websocket').server,
     lobber = require('lobber');
 
