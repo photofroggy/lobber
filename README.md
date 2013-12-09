@@ -31,13 +31,13 @@ server.listen(8044, function() {
 
 // Create a WebSocket server
 var wss = new WebSocketServer({
-    httpServer: crserver,
+    httpServer: server,
     autoAcceptConnections: false
 });
 
 // Create a lobber server!
 var lobserver = new lobber.Server( {
-    websocket: crwss
+    websocket: wss
 });
 
 // This is to prevent circular imports in lobber...
