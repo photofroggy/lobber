@@ -9,13 +9,16 @@
     "email": "photofroggy@gmail.com",
     "url": "https://github.com/photofroggy/"
   },
-  "version": "0.0.7",
+  "version": "0.0.8",
   "repository": {
     "type": "git",
     "url": "http://github.com/photofroggy/lobber.git"
   },
   "engines": {
     "node": ">=0.10.0"
+  },
+  "dependencies": {
+    "node-uuid": "1.4.1"
   },
   "config": {
     "verbose": false
