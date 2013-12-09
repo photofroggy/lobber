@@ -18,9 +18,6 @@ var http = require('http'),
     WebSocketServer = require('websocket').server,
     lobber = require('lobber');
 
-
-var lobserver = null;
-
 // Create a simple HTTP server.
 var server = http.createServer(function(request, response) {
     response.writeHead(404);
