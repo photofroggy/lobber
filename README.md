@@ -48,7 +48,7 @@ lobserver.onconnect = function( connection ) {
 ### Client
 Here we can use clobber to make a client, connect, and open a lobby/chatroom.
 
-```javascript```
+```javascript
 // Create a new lobber client.
 // This client automatically sends a login packet when connected.
 // Hence, the username and token should be provided here.
