@@ -13,31 +13,10 @@ In this example, you can see how to create a very simple chat application.
 On the server, you will need something like this.
 
 ```javascript
-// At the moment we need to use node-websocket for the websocket server
-var http = require('http'),
-    WebSocketServer = require('websocket').server,
-    lobber = require('lobber');
-
-// Create a simple HTTP server.
-var server = http.createServer(function(request, response) {
-    response.writeHead(404);
-    response.end();
-});
-
-// Listen for connections on port 8044    
-server.listen(8044, function() {
-    console.log((new Date()) + '] lobber server listening on port 8044');
-});
-
-// Create a WebSocket server
-var wss = new WebSocketServer({
-    httpServer: server,
-    autoAcceptConnections: false
-});
-
 // Create a lobber server!
 var lobserver = new lobber.Server( {
-    websocket: wss
+    websocket: 8044,
+    socket: 8080
 });
 
 // This is to prevent circular imports in lobber...
@@ -46,22 +25,77 @@ var ChatLobby = lobber.ChatLobby.Manager( 'chat' );
 // Register a chat application, and use ChatLobby to manage individual lobbies.
 lobserver.manager.registerApplication( 'chat', ChatLobby );
 
-// You need to tell the server whether to accept a request or not.
-// If you don't overwrite this method, all requests will be rejected!
-lobserver.onrequest = function( request, response, answer ) {
+// This method is called when someone connects.
+lobserver.onconnect = function( connection ) {
 
-    // Connections must have an associated user object.
-    // User objects should have an attribute `username`.
-    // Pass this to the answer method if you accept a request.
-    // Accept a request
-    var user = { username: 'testUser' };
-    answer( true, user );
-    console.log((new Date()) + '] lobber >> New connection from ' + user.username);
+    // Connections must be logged in to do anything specific.
+    // You can grant a connection access to whatever here, or you
+    // can wait for the user to send login data over the socket and
+    // verify it.
+    connection.onlogin = function( data ) {
+    
+        // Set the username
+        connection.user.username = data.username;
+        // Grant access to everything else
+        connection.user.loggedIn = true;
+    
+    };
 
 };
 
 ```
 
 ### Client
-Need to make a client library...
+Here we can use clobber to make a client, connect, and open a lobby/chatroom.
+
+```javascript```
+// Create a new lobber client.
+// This client automatically sends a login packet when connected.
+// Hence, the username and token should be provided here.
+var client = new Clobber({
+    "server": "ws://addr:port",
+    "user": {
+        "name": "username",
+        "token": "token"
+    }
+});
+
+// Create a lobby for chatrooms.
+var ChatLobby = function( client, ns, conn ) {
+
+    Clobber.Lobby.call(this, client, ns, conn);
+    this.type = 'chat';
+
+};
+
+ChatLobby.prototype = new Clobber.Lobby;
+ChatLobby.prototype.constructor = clobb;
+
+// Register the application with the client.
+client.registerApplication( 'chat', ChatLobby );
+
+// Connect to the server
+client.connect();
+
+// Join/open a channel when we log in
+client.on( 'pkt.login', function( event, client ) {
+
+    client.open( 'chat', 'test' );
+
+} );
+
+// Chat lobby is already open, so join  it instead.
+client.on( 'lobby.open.error', function( event, client ) {
+
+    client.join( event.application, event.id );
+
+} );
+
+// Joined a lobby! Say hello world!
+client.on( 'lobby.join', function( event, client ) {
+
+    event.lobby.say( 'Hello, world!' );
+
+} );
+```
 
